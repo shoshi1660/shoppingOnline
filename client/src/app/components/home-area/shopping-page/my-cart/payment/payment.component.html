@@ -1,0 +1,67 @@
+<div class="payment">
+  <form class="col-12 row no-gutters mt-5" (ngSubmit)="order()" #form="ngForm">
+    <p class="display-4 col-12">ORDER</p>
+    <h3 class=" col-12">Shipping Details:</h3>
+    <div class="col-12 row p-1">
+      <span class="col-4  text-left"> עיר:</span>
+      <select class="col-6" [(ngModel)]="newOrder.idCity" name="idCity" (dblclick)="ondbClick()" #idCity="ngModel">
+        <option *ngFor="let city of cities" [value]="city.idCity">{{city.cityName}}</option>
+      </select>
+      <span class="col-12 text-danger" *ngIf="idCity.errors && (idCity.dirty || idCity.touched)">
+        <span *ngIf="idCity.errors.required">שדה חובה</span>
+      </span>
+    </div>
+    <div class="col-12 row p-1">
+      <span class="col-4  text-left"> רחוב:</span>
+      <input class="col-6" [(ngModel)]="newOrder.street" name="street" required #street="ngModel" minlength="2"
+        (dblclick)="ondbClick()" maxlength="20" />
+      <span class="col-12 text-danger" *ngIf="street.errors && (street.dirty || street.touched)">
+        <span *ngIf="street.errors.required">שדה חובה</span>
+        <span *ngIf="street.errors.minlength">מינימום 2 תווים</span>
+      </span>
+    </div>
+    <div class="col-12 row p-1">
+      <span class="col-4  text-left"> תאריך משלוח:</span>
+      <input class="col-6" type="date" [(ngModel)]="newOrder.shipingDate" name="shipingDate"
+        (change)="changeDate($event)" required #shipingDate="ngModel" [min]="today" />
+      <span class="col-12 text-danger" *ngIf="shipingDate.errors && (shipingDate.dirty || shipingDate.touched)">
+        <span *ngIf="shipingDate.errors.required">שדה חובה</span>
+      </span>
+      <span class="col-12 text-danger" *ngIf="!availableDate">{{takenDatesWarn}}</span>
+    </div>
+    <h3 class=" col-12">payment: </h3>
+    <div class="col-12 row p-1">
+      <span class="col-4  text-left"> מספר כרטיס:</span>
+      <input class="col-6" type="tel" [(ngModel)]="newOrder.fourLastDigits" name="fourLastDigits" required
+        pattern="^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$"
+        #ccNumber #fourLastDigits="ngModel" minlength="16" maxlength="20" />
+      <span class="col-12 text-danger"
+        *ngIf="(fourLastDigits.errors||fourLastDigits.pattern) && (fourLastDigits.dirty || fourLastDigits.touched)">
+        <span *ngIf="fourLastDigits.errors.required">שדה חובה</span>
+        <span *ngIf="fourLastDigits.errors.pattern">מספר אשראי לא תקין</span>
+      </span>
+    </div>
+    <div class="col-12 p-2">
+      <input class="btn btn-outline-secondary" type="submit" value="order" [disabled]="!form.valid || !availableDate "
+        data-toggle="modal" data-target="#succesOrderModal" />
+    </div>
+
+  </form>
+  <div class="modal fade" id="succesOrderModal" tabindex="-1" role="dialog" [ngClass]="{'showModal': succesOrder}"
+    aria-labelledby="succesOrderModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="succesOrderModal">קניתך בוצעה בהצלחה! :)</h5>
+        </div>
+        <div class="modal-body ">
+          <P>להורדת הקבלה לחץ <a type="button" [href]="fileUrl" download="file.txt"> כאן</a></P>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="endOrder()" data-dismiss="modal">אישור
+            לעגלה</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

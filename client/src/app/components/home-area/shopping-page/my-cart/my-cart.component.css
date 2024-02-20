@@ -1,0 +1,20 @@
+.imgCart{
+    height: fit-content;
+    max-width: 80px;
+}
+.cart {
+  min-height:100%;
+}
+
+.navbar{
+  height: 30px;
+  margin-top: 80px;
+}
+
+.myCart{
+  padding: 20px;
+  border: 6px solid rgb(5, 67, 37);
+  min-height: 100%;
+  background-color: rgb(241, 218, 167);
+  margin: 5px;
+}

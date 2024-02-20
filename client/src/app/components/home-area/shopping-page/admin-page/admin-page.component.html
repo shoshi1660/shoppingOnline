@@ -1,0 +1,67 @@
+<div class="row cart">
+    <div class="col-12">
+        <div *ngIf="isShowCart">
+            <p class="display-4">ADMIN</p>
+            <button (click)="isAddProduct()">הוספת מוצר חדש</button>
+            <form class="form col-12 p-1" *ngIf="showDetails" (ngSubmit)="save()" #form="ngForm">
+                <div class="col-12 mb-3">
+                    <h3> {{productDitails}}</h3>
+                    <span class="col-12 mb-2 float-right">שם המוצר:</span>
+                    <input type="text" [(ngModel)]="product.productName" name="productName" required
+                        #productName="ngModel" minlength="2" maxlength="30" value="{{productName}}" /><br />
+                    <span class="col-12 text-danger"
+                        *ngIf="productName.errors && (productName.dirty || productName.touched)">
+                        <span *ngIf="productName.errors.required">שדה חובה</span>
+                        <span *ngIf="productName.errors.minlength">קצר מידי</span>
+                    </span>
+                </div>
+                <div class="col-12 mb-3" *ngIf="isUpdate">
+                    <span class="col-12 mb-2 float-right">Id מוצר:</span>
+                    <span>{{product.idProduct}}</span>
+                    <!-- <input type="number" [(ngModel)]="product.idProduct" name="idProduct" required
+                    #idProduct="ngModel" /><br /> -->
+                    <!-- <span class="text-danger" *ngIf="idProduct.errors && (idProduct.dirty || idProduct.touched)">
+                    <span *ngIf="idProduct.errors.required">שדה חובה</span>
+                </span> -->
+                </div>
+                <div class="col-12 mb-3">
+                    <span class="col-12 mb-2 float-right">מחיר המוצר:</span>
+                    <input type="number" [(ngModel)]="product.productPrice" name="productPrice" productPrice
+                        #productPrice="ngModel" />שח<br />
+                    <span class="text-danger"
+                        *ngIf="productPrice.errors && (productPrice.dirty || productPrice.touched)">
+                        <span *ngIf="productPrice.errors.required">שדה חובה</span>
+                    </span>
+                </div>
+                <div class="col-12 mb-3">
+                    <span class="col-12 mb-2 float-right">תמונת המוצר:</span>
+                    <input #imageControl type="file" accept="image/*" (change)="saveImage($event)" (blur)="imageBlur()"
+                        [(ngModel)]="product.productImage" name="productImage" productImage #productImage="ngModel" />
+                    <!-- <div class="col-5"> -->
+                    <img class="imgCart rounded pl-3" [src]="imageUrl + product.productImage" />
+                    <!-- </div> -->
+                    <!-- [src]="!newImg ? imageUrl + product.productImage :  imageUrl + product.productImage[0].name " -->
+                    <span *ngIf="imageVisited && !product.productImage">חסר תמונה</span>
+                </div>
+                <div class="col-12 row p-1">
+                    <span class="col-4  text-left"> קטגוריה:</span>
+                    <select class="col-6" [(ngModel)]="product.idCategory" name="idCategory" required
+                        #idCategory="ngModel">
+                        <option *ngFor="let category of categories" [value]="category.idCategory">
+                            {{category.categoryName}}
+                        </option>
+                    </select>
+                    <span class="col-12 text-danger"
+                        *ngIf="idCategory.errors && (idCategory.dirty || idCategory.touched)">
+                        <span *ngIf="idCategory.errors.required">שדה חובה</span>
+                    </span>
+                </div>
+                <div class="col-12 mb-2 mt-5">
+                    <input class="btn btn-outline-secondary" type="submit"
+                        [disabled]="!form.valid && product.productImage" value="save" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- <code>{{product.productName}}</code> -->
+</div>

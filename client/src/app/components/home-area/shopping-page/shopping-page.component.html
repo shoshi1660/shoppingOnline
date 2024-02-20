@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" *ngIf="!onOrder">
+    <div class="collapse navbar-collapse">
+        <ul class="col-9 navbar-nav navbar-nav-scroll " style="max-height: 100px;">
+            <li class="nav-item active nav-link" routerLink="/home">
+                Home</li>
+            <li class="nav-item active nav-link" (click)="filterProduct(333)">כלי מיטה</li>
+            <li class="nav-item active nav-link" (click)="filterProduct(222)">מגבות</li>
+            <li class="nav-item active nav-link" (click)="filterProduct(111)">מצעים</li>
+            <li class="nav-item active nav-link" (click)="filterProduct(444)">פינוקים לבית</li>
+            <li class="nav-item active nav-link" (click)="filterProduct()">כל המוצרים</li>
+        </ul>
+        <div class="d-flex col-3">
+            <button class="col-3 btn btn-outline-secondary btn-sm mr-2" (click)="searchProduct()"
+                type="submit">Search</button>
+            <input class="col-9  form-control-sm form-control" [(ngModel)]="searchStr" type="search"
+                placeholder="Search" aria-label="Search">
+        </div>
+    </div>
+</nav>
+
+<div class="row pt-4 pr-4">
+    <div *ngIf="!onOrder" [ngClass]="isShowCart ? 'col-8' : 'col-11'">
+        <div class="row p-4">
+            <div class="" *ngFor="let product of productShow">
+                <div class="m-1">
+                    <button class="border-0" (click)="openProductDetails(product)" class="btn btn-outline-secondary"
+                        data-toggle="modal" data-target="#productModal">
+                      
+                        <img [src]="imageUrl + product.productImage" />
+                        <br>
+                        <h6>{{product.productName}}{{cartShow}}</h6>
+                        <h6>{{product.productPrice}} ש"ח</h6>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div [ngClass]="onOrder ? 'col-12' : isShowCart ? 'col-4' : 'col-1'">
+
+        <button *ngIf="!onOrder" class="mt-4 float-right btnShowCart btn-outline-secondary btn-sm" (click)="showCart()">
+            <span *ngIf="isShowCart"> -> </span>
+            <span *ngIf="!isShowCart"> (- </span>
+        </button>
+
+        <app-admin-page *ngIf="admin" [selectProduct]="selectProduct" [isShowCart]="isShowCart"
+            (updetOrAddProduct)="GetupdetOrAddProduct($event)"></app-admin-page>
+        <app-my-cart class="relative p-4 w-full max-w-md h-full md:h-auto" *ngIf="!admin" [itemsCart]="itemsCart"
+            [isShowCart]="isShowCart" (onOrder)="GetOnOrder($event)"></app-my-cart>
+    </div>
+</div>
+<!-- פופאפ מוצר -->
+<div *ngIf="!admin" class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel">{{selectProduct.productName}}</h5>
+            </div>
+            <div class="modal-body ">
+                <img [src]="imageUrl + selectProduct.productImage" />
+                <input class="mr-5" type="number" min="1" [(ngModel)]="amount" />
+                <P>מחיר: {{selectProduct.productPrice*amount}}</P>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="cancelation()" class="btn btn-secondary"
+                    data-dismiss="modal">ביטול</button>
+                <button type="button" class="btn btn-primary" (click)="addToCart()" data-dismiss="modal">הוסף
+                    לעגלה</button>
+            </div>
+        </div>
+    </div>
+</div>

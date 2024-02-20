@@ -1,0 +1,41 @@
+<div class="row cart">
+
+    <app-payment *ngIf="isOnOrder" class="col-6" [finallPrice]="finallPrice"></app-payment>
+
+    <div [ngClass]="!isOnOrder ? 'col-12' : 'col-6'">
+        <div class="myCart">
+            <nav class="navbar fixed-top" *ngIf="isOnOrder">
+                <div class="col-4 float-right" role="main">
+                    <div for="searchStr">Search Text</div>
+                    <input type="search" class="form-control" id="search-text" placeholder="Enter text to search"
+                        autofocus (keyup)="onKeyUp($event)">
+                </div>
+            </nav>
+            <button type="button" *ngIf="isOnOrder" class="btn btn-link btn-outline-secondary btn-sm"
+                (click)="backToShopping()">חזרה
+                לקניות</button>
+            <div *ngIf="isShowCart">
+                <p class="display-4">MY CART</p>
+                <ul class="">
+                    <li class="row mb-5 pb-3 border-bottom" *ngFor="let item of itemsCart; let i = index">
+                        <div class="col-7 pr-5 text-right">
+                            <div [innerHTML]="item.productName | highlight: searchTerm"> {{item.productName}} <br>
+                            </div>
+                            {{item.productPrice}} שח <br>
+                            כמות: {{item.ProductQuantity}}
+                        </div>
+                        <div class="col-5">
+                            <img class="imgCart rounded pl-3" [src]="imageUrl + item.productImage" />
+                        </div>
+                        <button *ngIf="!isOnOrder" (click)="deleteProduct(i)"> X</button>
+                    </li>
+                </ul>
+                <h3>סכום: {{finallPrice}}</h3>
+                <div *ngIf="!isOnOrder && itemsCart?.length > 0">
+                    <button (click)="deleteAllProduct()">מחיקת כל המוצרים</button><br>
+                    <button class="btn btn-outline-secondary btn-md" (click)="toPayment()">לקופה</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

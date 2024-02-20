@@ -1,0 +1,70 @@
+<div class="row col-12 pt-4 p-3 no-gutters ">
+    <div class="col-3 pr-2">
+
+        <div class="row-col-12">
+            <form class="form col-12 p-1" (ngSubmit)="login()" #form="ngForm" *ngIf="!auth">
+                <h2 class="row-col-12 pb-3">כניסה בטוחה</h2>
+                <div class="col-12 mb-3">
+                    <span class="col-12 mb-2 float-right">שם משתמש:</span>
+                    <input [(ngModel)]="client.clientUserName" name="clientUserName" required #clientUserName="ngModel"
+                        minlength="6" maxlength="12" /><br />
+                    <span class="col-12 text-danger"
+                        *ngIf="clientUserName.errors && (clientUserName.dirty || clientUserName.touched)">
+                        <span *ngIf="clientUserName.errors.required">שדה חובה</span>
+                        <span *ngIf="clientUserName.errors.minlength">קצר מידי</span>
+                    </span>
+                </div>
+                <div class="col-12 mb-3">
+                    <span class="col-12 mb-2 float-right">סיסמה:</span>
+                    <input type="password" [(ngModel)]="client.clientPassword" name="clientPassword" required
+                        #clientPassword="ngModel" minlength="6" maxlength="12" /><br />
+                    <span class="text-danger"
+                        *ngIf="clientPassword.errors && (clientPassword.dirty || clientPassword.touched)">
+                        <span *ngIf="clientPassword.errors.required">שדה חובה</span>
+                        <span *ngIf="clientPassword.errors.minlength">קצר מידי</span>
+                    </span>
+                </div>
+                <div class="col-12 mb-2 mt-5">
+                    <input class="btn btn-outline-secondary" type="submit" [disabled]="!form.valid" value="login" />
+                </div>
+            </form>
+        </div>
+        <div class="col-12 mb-2">
+            <button class="btn btn-outline-secondary" *ngIf="!auth" (click)="addNewClient()">הרשם כעת</button>
+        </div>
+        <div class="col-12 mb-5" *ngIf="auth">
+            <button class="btn btn-outline-secondary" (click)="start()">
+                <span>
+                    {{cart}}
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <div class="col-6 about">
+        <img class="card-img-top" src="/assets/images/winter.JPG" alt="">
+        <div class="card-img-overlay col-12 p-5">
+            <h1>
+                — מאז 1958 —
+            </h1>
+            <h3>
+                מרעננים את הבית
+                עם קולקציות חורף וקיץ מדהימים! </h3>
+            <p>
+                באתר מוצעים למכירה פריטים המלווים בתמונות, התמונות נועדו להמחשה בלבד<br>ליד כל פריט מוצג מחירו
+                בשקלים,
+                משתמש באתר יכול להוסיף לסל הקניות כל פריט וזאת לאחר שהתרשם ממנו וממחירו,<br>המשתמש יכול לשנות
+                כמויות,
+                להוסיף ולגרוע פריטים מסל הקניות בכל עת, <br>בסיום ההזמנה יש לגשת לקופה לצורך אישורה. </p>
+        </div>
+    </div>
+    <div class="col-3 pl-2 font-weight-bold">
+        <img class="mb-5" style="width: 170px;" src="/assets/images/logo_pluma.JPG" alt="pluma">
+        <p>מוצרים זמינים בחנות שלנו <mark>{{productAmount}}</mark></p>
+        <p>מספר ההזמנות שהוגשו בחנות שלנו <mark>{{orderAmount}}</mark></p>
+        <div class="statusCart" *ngIf="auth">
+                       <span>{{title}}<br> {{date | date: 'dd/MM/yyyy'}} {{price}} </span>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

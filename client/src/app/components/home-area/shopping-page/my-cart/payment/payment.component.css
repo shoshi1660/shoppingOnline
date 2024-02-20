@@ -1,0 +1,8 @@
+
+.payment{
+    padding: 20px;
+    border: 6px solid rgb(5, 67, 37);
+    min-height: 100%;
+    background-color: rgb(241, 218, 167);
+    margin: 5px;
+}

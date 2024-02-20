@@ -1,0 +1,107 @@
+<p class="col-12 p-3  display-4">הרשמה מהירה ומאובטחת</p>
+<form class="col-12 row no-gutters" (ngSubmit)="onAdd()" #form="ngForm">
+    <div class="col-6 row no-gutters">
+        <h4 class="col-12">שלב ראשון</h4>
+        <div class="col-12 row p-1">
+            <span class="col-4  text-left"> מספר זהות:</span>
+            <input class="col-6" [(ngModel)]="newClient.clientIdentity" name="clientIdentity" required
+                (keyup)="checkIdentity($event)" #clientIdentity="ngModel" minlength="9" maxlength="9" /><br />
+            <span class="col-12 text-danger"
+                *ngIf="clientIdentity.errors && (clientIdentity.dirty || clientIdentity.touched)">
+                <span *ngIf="clientIdentity.errors.required">שדה חובה</span>
+                <span *ngIf="clientIdentity.errors.minlength||clientIdentity.errors.maxlength">אורך תעודת זהות לא
+                    תקין</span>
+            </span>
+            <span class="col-12 text-danger" *ngIf="!isValidID &&(clientIdentity.dirty || clientIdentity.touched)">מספר
+                זהות לא תקין</span>
+        </div>
+        <div class="col-12 row p-1">
+            <span class="col-4  text-left"> שם משתמש:</span>
+            <input class="col-6" [(ngModel)]="newClient.clientUserName" name="clientUserName" required
+                #clientUserName="ngModel" minlength="6" maxlength="20" />
+            <span class="col-12 text-danger"
+                *ngIf="clientUserName.errors && (clientUserName.dirty || clientUserName.touched)">
+                <span *ngIf="clientUserName.errors.required">שדה חובה</span>
+                <span *ngIf="clientUserName.errors.minlength">קצר מידי</span>
+                <span *ngIf="clientUserName.errors.maxlength">ארוך מידי</span>
+            </span>
+        </div>
+        <div class="col-12 row p-1">
+            <span class="col-4  text-left"> אימייל:</span>
+            <input class="col-6" type="email" [(ngModel)]="newClient.clientEmail" name="clientEmail" required
+                #clientEmail="ngModel" email="true" />
+            <span class="col-12 text-danger" *ngIf="clientEmail.errors && (clientEmail.dirty || clientEmail.touched)">
+                <span *ngIf="clientEmail.errors.required">שדה חובה</span>
+                <span *ngIf="clientEmail.errors.email"> אימייל לא תקין</span>
+            </span>
+        </div>
+        <div class="col-12 row p-1">
+            <span class="col-4  text-left"> סיסמה:</span>
+            <input class="col-6" type="password" [(ngModel)]="newClient.clientPassword" name="clientPassword" required
+                #clientPassword="ngModel" minlength="6" maxlength="12" />
+            <span class="col-12 text-danger"
+                *ngIf="clientPassword.errors && (clientPassword.dirty || clientPassword.touched)">
+                <span *ngIf="clientPassword.errors.required">שדה חובה</span>
+                <span *ngIf="clientPassword.errors.minlength">מינימום 6 תווים</span>
+            </span>
+        </div>
+        <div class="col-12 row p-1">
+            <span class="col-4  text-left"> אימות סיסמה: </span>
+            <input class="col-6" type="password" required name="checkPassword" (keyup)="checkPassword($event.target)"
+                minlength="6" maxlength="12" />
+            <span class="col-12 text-danger"
+                *ngIf="!isPassword && ((clientPassword.dirty || clientPassword.touched) && !clientPassword.errors)">סיסמא
+                לא תואמת</span>
+        </div>
+        <div class="col-12 p-2">
+            <span class="col-12 text-danger">{{idExist}}</span>
+        </div>
+    </div>
+    <div class="col-6 row no-gutters" *ngIf="stepTwo">
+        <h4 class="col-12">שלב שני</h4>
+        <div class="col-12 row p-1">
+            <span class="col-4  text-left"> עיר:</span>
+            <select class="col-6" [(ngModel)]="newClient.idCity" name="idCity" required #idCity="ngModel">
+                <option *ngFor="let city of cities" [value]="city.idCity">{{city.cityName}}</option>
+            </select>
+            <span class="col-12 text-danger" *ngIf="idCity.errors && (idCity.dirty || idCity.touched)">
+                <span *ngIf="idCity.errors.required">שדה חובה</span>
+            </span>
+        </div>
+        <div class="col-12 row p-1">
+            <span class="col-4  text-left"> רחוב:</span>
+            <input class="col-6" [(ngModel)]="newClient.street" name="street" required #street="ngModel" minlength="2"
+                maxlength="20" />
+            <span class="col-12 text-danger" *ngIf="street.errors && (street.dirty || street.touched)">
+                <span *ngIf="street.errors.required">שדה חובה</span>
+                <span *ngIf="street.errors.minlength">מינימום 2 תווים</span>
+            </span>
+        </div>
+        <div class="col-12 row p-1">
+            <span class="col-4 text-left"> שם פרטי:</span>
+            <input class="col-6" [(ngModel)]="newClient.clientName" name="clientName" required #clientName="ngModel"
+                minlength="3" />
+            <span class="col-12 text-danger" *ngIf="clientName.errors && (clientName.dirty || clientName.touched)">
+                <span *ngIf="clientName.errors.required">שדה חובה</span>
+                <span *ngIf="clientName.errors.minlength">מינימום 3 תווים</span>
+            </span>
+        </div>
+        <div class="col-12 row p-1">
+            <span class="col-4  text-left"> שם משפחה:</span>
+            <input class="col-6" [(ngModel)]="newClient.clientLastName" name="clientLastName" required
+                #clientLastName="ngModel" minlength="3" />
+            <span class="col-12 text-danger"
+                *ngIf="clientLastName.errors && (clientLastName.dirty || clientLastName.touched)">
+                <span *ngIf="clientLastName.errors.required">שדה חובה</span>
+                <span *ngIf="clientLastName.errors.minlength">מינימום 3 תווים</span>
+            </span>
+        </div>
+        <div class="col-12 p-2">
+            <input class="btn btn-outline-secondary" type="submit" value="Add" [disabled]="!form.valid" />
+        </div>
+    </div>
+</form>
+<button *ngIf="!stepTwo" class="btn btn-outline-secondary" (click)="toStepTwo()"
+    [disabled]="(!isPassword && clientPassword && clientIdentity && clientEmail) || !isValidID">
+    <span>לשלב הבא -> </span>
+</button>
